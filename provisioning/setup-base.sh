@@ -1,21 +1,5 @@
 #!/bin/sh
 
-# Script Arguments:
-# $1 - MTU
-# $2 - allinone IP address
-# $3 - allinone short name
-# $4 - compute1 IP address
-# $5 - compute1 short name
-# $6 - compute2 IP address
-# $7 - compute2 short name
-MTU=$1
-ALLINONE_IP=$2
-ALLINONE_NAME=$3
-COMPUTE1_IP=$4
-COMPUTE1_NAME=$5
-COMPUTE2_IP=$6
-COMPUTE2_NAME=$7
-
 BASE_PACKAGES="git bridge-utils ebtables python-pip python-dev build-essential ntp openvswitch-switch jq vlan libpcre3-dev"
 DEBIAN_FRONTEND=noninteractive sudo apt-get -qqy update
 DEBIAN_FRONTEND=noninteractive sudo apt-get install -qqy $BASE_PACKAGES

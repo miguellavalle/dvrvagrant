@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 BRIDGE=br-int
-IFACE_ID=a8e03982-3182-419c-825a-8ad1ef6f28fb
-IFACE_IPV4=10.1.0.7
-IFACE_IPV6=fd2a:d02c:d36b:1a::5
-IFACE_MAC=fa:16:3e:9b:a8:d1
+IFACE_ID=e6c2872e-b8fe-453b-ba5d-6622be2121f2
+IFACE_IPV4=10.1.0.9
+IFACE_IPV6=fd2a:d02c:d36b:1a::a
+IFACE_MAC=fa:16:3e:a7:da:c5
 IFACE_NAME=tx-miguel
 
 # Set up the bridge

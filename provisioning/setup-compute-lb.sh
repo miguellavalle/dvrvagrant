@@ -27,13 +27,16 @@ GLANCE_HOSTPORT=$ALLINONE_IP:9292
 VNCSERVER_PROXYCLIENT_ADDRESS=$ipaddress
 VNCSERVER_LISTEN=0.0.0.0
 
-[[post-config|/\$Q_PLUGIN_CONF_FILE]]
-[ovs]
-local_ip=$ipaddress
+# Enable linuxbridge agent 
+Q_AGENT=linuxbridge
 
-[agent]
-tunnel_types=vxlan
+[[post-config|/\$Q_PLUGIN_CONF_FILE]]
+
+[vxlan]
+enable_vxlan=True
 l2_population=True
+local_ip=$ipaddress
+udp_dstport=4789
 DEVSTACKEOF
 
 devstack/stack.sh

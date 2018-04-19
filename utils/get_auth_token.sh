@@ -30,6 +30,6 @@ REQUEST_TAIL='
         }
    }'
 REQUEST="$REQUEST_HEAD \"$USER\", $REQUEST_MIDDLE \"$PROJECT\" $REQUEST_TAIL"
-curl -si -X POST http://192.168.33.12/identity/v3/auth/tokens \
+TOKEN=$(curl -si -X POST http://localhost/identity/v3/auth/tokens \
     -H "Content-type: application/json" \
-    -d "$REQUEST" | awk '/X-Subject-Token/ {print $2}'
+    -d "$REQUEST" | awk '/X-Subject-Token/ {print $2}')

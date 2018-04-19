@@ -1,18 +1,11 @@
 ---
 box: "miguel/ubuntu-16.04"
-multinet_segmentation_id: 2016
-segment1_ipv4_cidr: "10.1.0.0/24"
-segment2_ipv4_cidr: "10.1.1.0/24"
-segment1_ipv6_cidr: "fd2a:d02c:d36b:1a::/64"
-segment2_ipv6_cidr: "fd2a:d02c:d36b:1b::/64"
 allinone:
   short_name: "allinone"
   host_name: "allinone.devstack.dev"
   ip: "192.168.33.12"
   memory: 6144
   cpus: 2
-  vlan_interface: "eth2"
-  physical_network: "physnet1"
   mtu: 1500
 compute1:
   short_name: "compute1"
@@ -20,8 +13,6 @@ compute1:
   ip: "192.168.33.31"
   memory: 1536
   cpus: 1
-  vlan_interface: "eth2"
-  physical_network: "physnet1"
   mtu: 1500
 compute2:
   short_name: "compute2"
@@ -29,22 +20,11 @@ compute2:
   ip: "192.168.33.32"
   memory: 1536
   cpus: 1
-  vlan_interface: "eth3"
-  physical_network: "physnet2"
   mtu: 1500
 compute3:
   short_name: "compute3"
   host_name: "compute3.devstack.dev"
   ip: "192.168.33.33"
   memory: 1536
-  cpus: 1
-  vlan_interface: "eth3"
-  physical_network: "physnet2"
-  mtu: 1500
-iprouter:
-  short_name: "iprouter"
-  host_name: "iprouter.devstack.dev"
-  ip: "192.168.33.40"
-  memory: 512
   cpus: 1
   mtu: 1500

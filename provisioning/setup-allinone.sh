@@ -1,33 +1,9 @@
 #!/usr/bin/env bash
 
-# Script Arguments:
-# $1 -  Interface for Vlan type networks
-# $2 -  Physical network for Vlan type networks interface in allinone and compute1 "rack"
-# $3 -  Physical network for Vlan type networks interface in compute2 and compute3 "rack"
-# $4 -  Segmentation id to be used when creating vlan segments
-# $5 -  IPv4 subnet CIDR for vlan's segment 1
-# $6 -  IPv4 subnet CIDR for vlan's segment 2
-# $7 -  IPv6 subnet CIDR for vlan's segment 1
-# $8 -  IPv6 subnet CIDR for vlan's segment 2
-VLAN_INTERFACE=$1
-PHYSICAL_NETWORK=$2
-COMPUTES_PHYSICAL_NETWORK=$3
-SEGMENTATION_ID=$4
-SEGMENT1_IPV4_CIDR=$5
-SEGMENT2_IPV4_CIDR=$6
-SEGMENT1_IPV6_CIDR=$7
-SEGMENT2_IPV6_CIDR=$8
-
 cp /vagrant/provisioning/local.conf.base devstack/local.conf
 
 # Get the IP address
 ipaddress=$(ip -4 addr show eth1 | grep -oP "(?<=inet ).*(?=/)")
-
-# Create bridges for Vlan type networks
-sudo ifconfig $VLAN_INTERFACE 0.0.0.0 up
-bridge=br-$VLAN_INTERFACE
-sudo ovs-vsctl add-br $bridge
-sudo ovs-vsctl add-port $bridge $VLAN_INTERFACE
 
 # Adjust local.conf
 cat << DEVSTACKEOF >> devstack/local.conf
@@ -50,23 +26,26 @@ enable_service tempest
 [[post-config|\$NEUTRON_CONF]]
 [DEFAULT]
 service_plugins=router,segments
+allow_overlapping_ips=True
 
 [[post-config|/\$Q_PLUGIN_CONF_FILE]]
 [ml2]
-type_drivers=flat,vlan,vxlan
-tenant_network_types=vxlan,vlan
-mechanism_drivers=openvswitch,l2population
+type_drivers=flat,vxlan
+tenant_network_types=vxlan
+mechanism_drivers=openvswitch,linuxbridge,l2population
 extension_drivers=port_security
 
 [ml2_type_vxlan]
 vni_ranges=1000:1999
 
-[ml2_type_vlan]
-network_vlan_ranges=$PHYSICAL_NETWORK:1000:1999,$COMPUTES_PHYSICAL_NETWORK:1000:1999
-
 [ovs]
 local_ip=$ipaddress
-bridge_mappings=$PHYSICAL_NETWORK:$bridge
+
+[vxlan]
+enable_vxlan=True
+l2_population=True
+local_ip=$ipaddress
+
 
 [agent]
 tunnel_types=vxlan
@@ -87,63 +66,3 @@ expiration=30000000
 DEVSTACKEOF
 
 devstack/stack.sh
-
-source devstack/openrc admin admin
-
-NET_ID=$(openstack network create --share --provider-physical-network physnet1 \
-    --provider-network-type vlan --provider-segment $SEGMENTATION_ID multinet |
-    grep ' id ' | awk 'BEGIN{} {print $4} END{}')
-
-openstack network segment create --physical-network physnet2 \
-    --network-type vlan --segment $SEGMENTATION_ID --network $NET_ID segment2
-
-TOKEN=$(curl -si -X POST http://localhost/identity/v3/auth/tokens \
-    -H "Content-type: application/json" \
-    -d '{
-            "auth": {
-                "identity": {
-                    "methods": [
-                        "password"
-                    ],
-                    "password": {
-                        "user": {
-                            "domain": {
-                                "name": "Default"
-                            },
-                            "name": "admin",
-                            "password": "devstack"
-                        }
-                    }
-                },
-                "scope": {
-                    "project": {
-                        "domain": {
-                            "name": "Default"
-                        },
-                        "name": "admin"
-                    }
-                }
-            }
-        }' \
-    | awk '/X-Subject-Token/ {print $2}')
-
-SEGMENT1_ID=$(curl -s -X GET http://localhost:9696/v2.0/segments?physical_network=physnet1\&network_id=$NET_ID \
-    -H "Content-type: application/json" \
-    -H "X-Auth-Token: $TOKEN" \
-    | jq -r .segments[0].id)
-
-SEGMENT2_ID=$(curl -s -X GET http://localhost:9696/v2.0/segments?physical_network=physnet2\&network_id=$NET_ID \
-    -H "Content-type: application/json" \
-    -H "X-Auth-Token: $TOKEN" \
-    | jq -r .segments[0].id)
-
-openstack network segment set --name segment1 $SEGMENT1_ID
-
-openstack subnet create --network $NET_ID --network-segment $SEGMENT1_ID \
-    --ip-version 4 --subnet-range $SEGMENT1_IPV4_CIDR multinet-segment1-subnet 
-openstack subnet create --network $NET_ID --network-segment $SEGMENT1_ID \
-    --ip-version 6 --subnet-range $SEGMENT1_IPV6_CIDR ipv6-multinet-segment1-subnet
-openstack subnet create --network $NET_ID --network-segment $SEGMENT2_ID \
-    --ip-version 4 --subnet-range $SEGMENT2_IPV4_CIDR multinet-segment2-subnet 
-openstack subnet create --network $NET_ID --network-segment $SEGMENT2_ID \
-    --ip-version 6 --subnet-range $SEGMENT2_IPV6_CIDR ipv6-multinet-segment2-subnet
