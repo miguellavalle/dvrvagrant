@@ -27,12 +27,13 @@ enable_service tempest
 [DEFAULT]
 service_plugins=router,segments
 allow_overlapping_ips=True
+router_distributed=True
 
 [[post-config|/\$Q_PLUGIN_CONF_FILE]]
 [ml2]
 type_drivers=flat,vxlan
 tenant_network_types=vxlan
-mechanism_drivers=openvswitch,linuxbridge,l2population
+mechanism_drivers=openvswitch,l2population
 extension_drivers=port_security
 
 [ml2_type_vxlan]
@@ -50,9 +51,11 @@ local_ip=$ipaddress
 [agent]
 tunnel_types=vxlan
 l2_population=True
+enable_distributed_routing=True
 
 [[post-config|\$Q_L3_CONF_FILE]]
 [DEFAULT]
+agent_mode=dvr
 router_delete_namespaces=True
 
 [[post-config|\$Q_DHCP_CONF_FILE]]

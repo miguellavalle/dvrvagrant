@@ -14,17 +14,10 @@ compute1:
   memory: 1536
   cpus: 1
   mtu: 1500
-compute2:
-  short_name: "compute2"
-  host_name: "compute2.devstack.dev"
+network:
+  short_name: "network"
+  host_name: "network.devstack.dev"
   ip: "192.168.33.32"
-  memory: 1536
-  cpus: 1
-  mtu: 1500
-compute3:
-  short_name: "compute3"
-  host_name: "compute3.devstack.dev"
-  ip: "192.168.33.33"
   memory: 1536
   cpus: 1
   mtu: 1500
