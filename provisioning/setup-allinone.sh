@@ -55,7 +55,7 @@ enable_distributed_routing=True
 
 [[post-config|\$Q_L3_CONF_FILE]]
 [DEFAULT]
-agent_mode=dvr
+agent_mode=dvr_snat
 router_delete_namespaces=True
 
 [[post-config|\$Q_DHCP_CONF_FILE]]
