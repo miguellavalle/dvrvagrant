@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASE_PACKAGES="git bridge-utils ebtables python-pip python-dev build-essential ntp openvswitch-switch jq vlan libpcre3-dev"
+BASE_PACKAGES="git bridge-utils ebtables python-pip python-dev build-essential ntp openvswitch-switch jq vlan libpcre3-dev pysaml2"
 DEBIAN_FRONTEND=noninteractive sudo apt-get -qqy update
 DEBIAN_FRONTEND=noninteractive sudo apt-get install -qqy $BASE_PACKAGES
 echo export LC_ALL=en_US.UTF-8 >> ~/.bash_profile

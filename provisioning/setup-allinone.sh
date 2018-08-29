@@ -28,6 +28,9 @@ enable_service tempest
 service_plugins=router,segments
 allow_overlapping_ips=True
 router_distributed=True
+l3_ha=True
+l3_ha_net_cidr=169.254.192.0/18
+max_l3_agents_per_router=3
 
 [[post-config|/\$Q_PLUGIN_CONF_FILE]]
 [ml2]
@@ -55,8 +58,10 @@ enable_distributed_routing=True
 
 [[post-config|\$Q_L3_CONF_FILE]]
 [DEFAULT]
+interface_driver=openvswitch
 agent_mode=dvr_snat
 router_delete_namespaces=True
+ha_vrrp_auth_password=devstack
 
 [[post-config|\$Q_DHCP_CONF_FILE]]
 [DEFAULT]

@@ -2,8 +2,6 @@
 
 # Script Arguments:
 # $1 -  Allinone node IP adddress
-# $2 -  Interface for Vlan type networks
-# $3 -  Physical network for Vlan type networks interface
 ALLINONE_IP=$1
 
 cp /vagrant/provisioning/local.conf.base devstack/local.conf
@@ -39,7 +37,9 @@ enable_distributed_routing=True
 [[post-config|\$Q_L3_CONF_FILE]]
 [DEFAULT]
 agent_mode=dvr_snat
+interface_driver=openvswitch
 router_delete_namespaces=True
+ha_vrrp_auth_password=devstack
 DEVSTACKEOF
 
 devstack/stack.sh

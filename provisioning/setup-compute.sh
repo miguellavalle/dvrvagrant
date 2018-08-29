@@ -40,6 +40,7 @@ enable_distributed_routing=True
 [DEFAULT]
 agent_mode=dvr
 router_delete_namespaces=True
+interface_driver=openvswitch
 DEVSTACKEOF
 
 devstack/stack.sh
