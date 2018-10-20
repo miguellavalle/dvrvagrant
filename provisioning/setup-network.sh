@@ -33,6 +33,8 @@ local_ip=$ipaddress
 tunnel_types=vxlan
 l2_population=True
 enable_distributed_routing=True
+extensions=qos
+dscp=8
 
 [[post-config|\$Q_L3_CONF_FILE]]
 [DEFAULT]
@@ -40,6 +42,9 @@ agent_mode=dvr_snat
 interface_driver=openvswitch
 router_delete_namespaces=True
 ha_vrrp_auth_password=devstack
+ovs_use_veth=True
+[agent]
+extensions=fip_qos
 DEVSTACKEOF
 
 devstack/stack.sh
