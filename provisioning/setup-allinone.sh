@@ -25,6 +25,8 @@ enable_service q-l3
 enable_service tempest
 enable_plugin designate https://git.openstack.org/openstack/designate
 enable_plugin neutron-tempest-plugin https://git.openstack.org/openstack/neutron-tempest-plugin
+enable_plugin osprofiler https://git.openstack.org/openstack/osprofiler
+OSPROFILER_COLLECTOR=redis
 
 [[post-config|\$NEUTRON_CONF]]
 [DEFAULT]
