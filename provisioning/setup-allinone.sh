@@ -12,6 +12,9 @@ cat << DEVSTACKEOF >> devstack/local.conf
 # Set this host's IP
 HOST_IP=$ipaddress
 
+# Set firewall driver
+FW_DRV=openvswitch
+
 # Enable Neutron as the networking service
 disable_service n-net
 enable_service placement-api
@@ -30,7 +33,7 @@ OSPROFILER_COLLECTOR=redis
 
 [[post-config|\$NEUTRON_CONF]]
 [DEFAULT]
-service_plugins=router,segments,qos
+service_plugins=router,segments,qos,trunk
 allow_overlapping_ips=True
 router_distributed=True
 l3_ha=True
@@ -59,6 +62,10 @@ tenant_network_types=vxlan
 mechanism_drivers=openvswitch,l2population
 extension_drivers=port_security,dns_domain_ports,qos
 
+[securitygroup]
+firewall_driver=$FW_DRV
+enable_security_group=True
+
 [ml2_type_vxlan]
 vni_ranges=1000:1999
 
@@ -69,7 +76,6 @@ local_ip=$ipaddress
 enable_vxlan=True
 l2_population=True
 local_ip=$ipaddress
-
 
 [agent]
 tunnel_types=vxlan

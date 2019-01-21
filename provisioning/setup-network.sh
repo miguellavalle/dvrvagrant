@@ -15,7 +15,7 @@ cat << DEVSTACKEOF >> devstack/local.conf
 # Set this host's IP
 HOST_IP=$ipaddress
 
-# Enable services to be executed in compute node
+# Enable services to be executed in network node
 ENABLED_SERVICES=neutron,q-agt,q-l3,q-meta
 
 # Set the controller's IP

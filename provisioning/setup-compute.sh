@@ -16,7 +16,7 @@ cat << DEVSTACKEOF >> devstack/local.conf
 HOST_IP=$ipaddress
 
 # Enable services to be executed in compute node
-ENABLED_SERVICES=n-cpu,neutron,n-novnc,q-agt,q-l3,q-meta,placement-api
+ENABLED_SERVICES=n-cpu,neutron,n-novnc,q-agt,q-l3,q-meta,placement-client
 
 # Set the controller's IP
 SERVICE_HOST=$ALLINONE_IP
