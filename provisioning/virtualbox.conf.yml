@@ -1,5 +1,5 @@
 ---
-box: "miguel/ubuntu-16.04"
+box: "miguel/ubuntu-18.04"
 allinone:
   short_name: "allinone"
   host_name: "allinone.devstack.dev"
