@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASE_PACKAGES="git bridge-utils ebtables python-pip python-dev build-essential ntp openvswitch-switch jq vlan libpcre3-dev pysaml2"
+BASE_PACKAGES="git bridge-utils ebtables python-pip python-dev build-essential ntp openvswitch-switch jq vlan libpcre3-dev"
 DEBIAN_FRONTEND=noninteractive sudo apt-get -qqy update
 DEBIAN_FRONTEND=noninteractive sudo apt-get install -qqy $BASE_PACKAGES
 echo export LC_ALL=en_US.UTF-8 >> ~/.bash_profile
@@ -49,12 +49,14 @@ git clone https://github.com/scrooloose/syntastic.git .vim/bundle/syntastic
 git clone https://github.com/tmhedberg/SimpylFold .vim/bundle/SimpylFold
 git clone https://github.com/Raimondi/delimitMate .vim/bundle/delimitMate
 git clone https://github.com/morhetz/gruvbox .vim/bundle/gruvbox
+git clone https://github.com/tpope/vim-fugitive .vim/bundle/vim-fugitive
+vim -u NONE -c "helptags vim-fugitive/doc" -c q
 
 # Prepare for devstack
 
 sudo chown vagrant:vagrant /opt
 sudo chown vagrant:vagrant /opt/stack
-git clone https://git.openstack.org/openstack-dev/devstack.git
+git clone https://opendev.org/openstack/devstack.git
 
 # If available, use repositories on host to facilitate testing local changes.
 # Vagrant requires that shared folders exist on the host, so additionally
